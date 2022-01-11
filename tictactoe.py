@@ -1,9 +1,9 @@
 
-
+import sys
 board = [
+    ['o', '#','#'],
     ['#', '#','#'],
-    ['#', '#','#'],
-    ['#', '#','#']
+    ['x', '#','o']
 ]
 
 def isFull(board):
@@ -62,8 +62,116 @@ def allBoards(board):
     allTTTBoards(board, True)
     return {"wins": win_boards, "draws": draw_boards}
 
-res = allBoards(board)
-print('wins', len(res['wins']))
-# for a in res['wins']
-#     print(str(a) + '\n')
-print('draws', len(res['draws']))
+BOARDS = []
+COMP = 'o'
+PLAYER = 'x'
+
+def evaluate(board):
+    if isWin(board, PLAYER):
+        BOARDS.append(board)
+        return (1, board)
+
+    elif isWin(board, COMP):
+        return (-1, board)
+
+    elif isFull(board):
+        return (0, board)
+
+    return ()
+
+
+
+def alpha_beta(board):
+    return max_value(board, (), -sys.maxsize, sys.maxsize)
+    
+
+def min_value(board, moves, alpha, beta):
+
+    if (e := evaluate(board)) != ():
+        return (e[0], e[1], moves)
+
+    res = sys.maxsize
+    final_board = []
+    best_moves = ()
+
+    for i in range(len(board)): 
+        end_loop = False
+        for j in range(len(board)):
+            if board[i][j] == '#':
+                boardCopy = [a[:] for a in board]
+                boardCopy[i][j] = PLAYER
+                val, b, moves = max_value(boardCopy, moves + ((i, j)), alpha, beta)                
+                if val < res:
+                    res = val
+                    best_moves = moves
+                    final_board = b
+
+                beta = min(res, beta)
+
+        #         if res <= alpha:
+        #             end_loop = True
+        #             break 
+        # if end_loop:
+        #     break
+
+    return (res, final_board, best_moves)
+
+def max_value(board, moves, alpha, beta):
+
+    if (e := evaluate(board)) != ():
+        return (e[0], e[1], moves)
+
+    res = -sys.maxsize
+    final_board = []
+    best_moves = ()
+    for i in range(len(board)): 
+        end_loop = False
+        for j in range(len(board)):
+            if board[i][j] == '#':
+                boardCopy = [a[:] for a in board]
+                boardCopy[i][j] = COMP
+                val, b, moves = min_value(boardCopy, moves + ((i, j)), alpha, beta)                
+                if val > res:
+                    res = val
+                    final_board = b
+                    best_moves = moves
+                        
+                alpha = max(res, alpha)
+
+                # if res >= beta:
+                #     end_loop = True
+                #     break 
+
+        # if end_loop:
+        #     break
+
+    return (res, final_board, best_moves)    
+
+boards = [
+    [
+        ['#', '#','#'],
+        ['#', '#','#'],
+        ['#', '#','#']
+    ],
+    [
+        ['o', '#','#'],
+        ['#', '#','#'],
+        ['x', '#','o']
+    ],
+    [
+        ['#', '#','x'],
+        ['o', '#','#'],
+        ['o', '#','#']
+    ],
+    [
+        ['x', '#','#'],
+        ['#', '#','#'],
+        ['x', '#','x']
+    ],
+]
+
+res = alpha_beta(boards[2])
+print(res)
+# print(BOARDS)
+# for b in BOARDS:
+#     print(str(b) + '\n')
