@@ -4,7 +4,12 @@ class Game:
     def __init__(self, rows, cols, to_win):
         self.board = [[EMPTY]*cols for _ in range(rows)]
         self.to_win = to_win
-    
+        self.rows = rows
+        self.cols = cols
+
+    def clear(self):
+        self.board = [[EMPTY]*self.cols for _ in range(self.rows)]
+
     def getBoard(self):
         return self.board
 
@@ -91,14 +96,16 @@ class Game:
         else:
             raise IndexError("Invalid move")
 
+    
+
 
 class TicTacToe(Game):
     def __init__(self):
-        self.super(3, 3, 3)
+        super(TicTacToe, self).__init__(3, 3, 3)
 
 class Connect4(Game):
     def __init__(self):
-        self.super(6, 7, 4)
+        super(Connect4, self).__init__(6, 7, 4)
 
     def lowestRow(self, board, column):
         if column[0] != EMPTY:

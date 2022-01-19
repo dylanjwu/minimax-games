@@ -4,28 +4,31 @@ from utils import *
 
 class AI:
 
+    def __init__(self, game):
+        self.game = game
+
     def evaluate(self, board):
 
-        if self.isWin(board, PLAYER):
+        if self.game.isWin(board, PLAYER):
             return -10
 
-        elif self.isWin(board, COMP):
+        elif self.game.isWin(board, COMP):
             return 10
 
-        elif self.isFull(board):
+        elif self.game.isFull(board):
             return 0
 
         return None
 
-    def alpha_beta(self, game):
-        board = game.getBoard()
+    def alpha_beta(self):
+        board = self.game.getBoard()
 
         indices = [(i,j) for i in range(len(board)) for j in range(len(board))]
 
         board_copy = [a[::] for a in board]
 
         maxx = -sys.maxsize
-        pos = ()
+        pos = (None, None)
         for position in indices:
             board_copy = [a[::] for a in board]
             i,j=position
