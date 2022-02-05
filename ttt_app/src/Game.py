@@ -90,16 +90,16 @@ class Game:
         return (self.winsRow(board, player) or self.winsColumn(board, player) 
             or self.winsDiagonal(board, player))
 
-    def isValid(self, row, column):
-        if 0 > row >= len(self.board) or 0 > column >= len(self.board[0]):
+    def isValid(self, row, column, board):
+        if 0 > row >= len(board) or 0 > column >= len(board[0]):
             return False
         return True
 
-    def getMove(self, row, column):
-        if self.isValid(row, column) and self.board[row][column] == EMPTY:
+    def getMove(self, row, column, board):
+        if self.isValid(row, column, board) and board[row][column] == EMPTY:
             return (row, column)
         else:
-            raise IndexError("Invalid move")
+            return ()
 
     
 
@@ -107,10 +107,12 @@ class Game:
 class TicTacToe(Game):
     def __init__(self):
         super(TicTacToe, self).__init__(3, 3, 3)
+        self.indices = [(i,j) for i in range(self.cols) for j in range(self.rows)]
 
 class Connect4(Game):
     def __init__(self):
         super(Connect4, self).__init__(6, 7, 4)
+        self.indices = [(0,i) for i in range(self.cols)]
 
     def lowestRow(self, board, column):
         if column[0] != EMPTY:
@@ -122,12 +124,12 @@ class Connect4(Game):
 
         return row_move
 
-    def getMove(self, row, column):
+    def getMove(self, row, column, board):
         if self.isValid(row, column):
-            if (row := self.lowestRow(column)) == -1:
+            if (row := self.lowestRow(board, column)) == -1:
                 raise IndexError("Column is full")
             return (row, column)
         else:
-            raise IndexError("Invalid move")
+            return ()
 
 # game = TicTacToe()

@@ -61,3 +61,4 @@ def ai_move():
         return jsonify(curr_game.getBoard())
     curr_game.markSquare(row, col, COMP)
     return jsonify(curr_game.getBoard())
+

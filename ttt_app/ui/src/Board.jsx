@@ -24,7 +24,7 @@ export default class Board extends Component {
   renderSquare(player, id){
     return (<button 
           id={`sq${id+1}`} 
-          onClick={()=> player == '#' ? this.playerMove(id) : null}>
+          onClick={()=> player === '#' ? this.playerMove(id) : null}>
             {player === '#' ? "" : player }
         </button>);
   }
