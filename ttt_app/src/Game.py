@@ -1,4 +1,5 @@
 from utils import *
+# from minimax import AI
 
 class Game:
     def __init__(self, rows, cols, to_win):
@@ -9,6 +10,10 @@ class Game:
 
     def clear(self):
         self.board = [[EMPTY]*self.cols for _ in range(self.rows)]
+
+    def printBoard(self):
+        for row in self.board:
+            print(row)
 
     def getBoard(self):
         return self.board
@@ -47,7 +52,7 @@ class Game:
                 #check left
                 i = row; j = col;
                 player_count = 0
-                while i < len(board) and j > 0:
+                while i < len(board) and j >= 0:
                     if board[i][j] == player:
                         player_count += 1
                         if player_count == self.to_win:
@@ -74,7 +79,7 @@ class Game:
             for el in row:
                 if el == player:
                     player_count += 1
-                    if player_count == 4:
+                    if player_count == self.to_win:
                         return True
                 else:
                     player_count = 0
@@ -124,3 +129,5 @@ class Connect4(Game):
             return (row, column)
         else:
             raise IndexError("Invalid move")
+
+# game = TicTacToe()
